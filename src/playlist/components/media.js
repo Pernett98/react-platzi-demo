@@ -8,7 +8,8 @@ class Media extends PureComponent {
     cover: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     author: PropTypes.string,
-    type: PropTypes.oneOf(['video', 'image'])
+    type: PropTypes.oneOf(['video', 'image']),
+    handleClick: PropTypes.func
   }
 
   constructor (props) {
@@ -23,7 +24,7 @@ class Media extends PureComponent {
   render() {
     const { title, author, cover } = this.state;
     return (
-      <div className="Media" onClick={this.handleClick}>
+      <div className="Media" onClick={this.props.handleClick}>
         <div className="Media-cover">
           <img className="Media-image"
             src={cover}
@@ -34,11 +35,6 @@ class Media extends PureComponent {
         </div>
       </div>
     );
-  }
-
-  handleClick = (event) => {
-    console.log(event);
-    console.log(this);
   }
 
 }
