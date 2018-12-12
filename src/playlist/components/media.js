@@ -5,9 +5,10 @@ import './media.css';
 class Media extends PureComponent {
 
   static propTypes = {
-    cover: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     author: PropTypes.string,
+    cover: PropTypes.string.isRequired,
     type: PropTypes.oneOf(['video', 'image']),
     handleClick: PropTypes.func
   }
@@ -21,10 +22,15 @@ class Media extends PureComponent {
     }
   }
 
+  handleClick = (event) => {
+
+    this.props.openModal(this.props.id);
+  }
+
   render() {
     const { title, author, cover } = this.state;
     return (
-      <div className="Media" onClick={this.props.handleClick}>
+      <div className="Media" onClick={this.handleClick}>
         <div className="Media-cover">
           <img className="Media-image"
             src={cover}

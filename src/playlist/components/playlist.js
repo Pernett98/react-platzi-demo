@@ -1,5 +1,5 @@
 import React from 'react';
-import Media from './media';
+import MediaContainer from '../containers/media';
 import './playlist.css';
 import PropTypes from 'prop-types';
 
@@ -8,17 +8,17 @@ function Playlist(props) {
   const { playlist } = props;
   return (
     <div className="Playlist">
-      {playlist.map((item) => {
-        return <Media key={item.id}
-          handleClick={props.handleOpenModal}
-          {...item} />
+      {playlist.map((mediaId) => {
+        return <MediaContainer key={mediaId}
+          openModal={props.handleOpenModal}
+          id={mediaId} />
       })}
     </div>
   )
 }
 
 Playlist.propTypes = {
-  playlist: PropTypes.array.isRequired
+  playlist: PropTypes.object.isRequired
 };
 
 export default Playlist;
