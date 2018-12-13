@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { List as list } from 'immutable';
 
@@ -9,28 +10,16 @@ import HomeLayout from "../components/home-layout";
 import Related from '../components/related';
 import HandleError from '../../errors/containers/handle-error';
 import VideoPlayer from '../../player/container/video-player';
+import * as actions from '../../actions/index';
 
 class Home extends Component {
 
-  state = {
-    modalVisible: false,
-    media: {
-      title: '',
-      src: ''
-    }
-  }
-
   handleCloseClick = () => {
-    this.setState({
-      modalVisible: false
-    })
+    this.props.actions.closeModal()
   }
 
-  handleOpenModal = (media) => {
-    this.setState({
-      modalVisible: true,
-      media
-    })
+  handleOpenModal = (mediaId) => {
+    this.props.actions.openModal(mediaId)
   }
 
   render() {
@@ -41,15 +30,20 @@ class Home extends Component {
           <Categories
             categories={this.props.categories}
             handleOpenModal={this.handleOpenModal}
-            search={this.props.search}></Categories>
-          {this.state.modalVisible &&
+            search={this.props.search}
+            isLoading={this.props.isLoading}
+          ></Categories>
+          {
+            this.props.modal.get('visibility') &&
             <ModalContainer>
               <Modal handleCloseClick={this.handleCloseClick}>
-                <VideoPlayer autoPlay
-                  title={this.state.media.title}
-                  src={this.state.media.src}></VideoPlayer>
+                <VideoPlayer 
+                  autoPlay
+                  mediaId={this.props.modal.get('mediaId')}
+                ></VideoPlayer>
               </Modal>
-            </ModalContainer>}
+            </ModalContainer>
+          }
         </HomeLayout>
       </HandleError>
     );
@@ -74,7 +68,9 @@ function mapStateToProps(state, props) {
 
   return {
     categories,
-    search: searchResult
+    search: searchResult,
+    modal: state.get('modal'),
+    isLoading: state.getIn(['isLoading', 'active'])
   }
 }
 
@@ -84,4 +80,10 @@ function compareInsensitive(text, criteria) {
   return regexp.test(text);
 }
 
-export default connect(mapStateToProps)(Home);
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

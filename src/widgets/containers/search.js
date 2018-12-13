@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Search from '../components/search';
 
+import Search from '../components/search';
+import * as actions from '../../actions/index';
 
 class SearchContainer extends Component {
 
@@ -15,15 +17,7 @@ class SearchContainer extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    console.log('HI');
-    console.log('👵📸', this.input.value);
-    console.log(this)
-    this.props.dispatch({
-      type: 'SEARCH_VIDEO',
-      payload: {
-        query: this.input.value
-      }
-    })
+    this.props.actions.searchAsyncEntities(this.input.value)
   }
 
   handleInputChange = event => {
@@ -43,4 +37,10 @@ class SearchContainer extends Component {
 
 }
 
-export default connect()(SearchContainer);
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  }
+}
+
+export default connect(null, mapDispatchToProps)(SearchContainer);

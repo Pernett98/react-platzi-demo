@@ -36,9 +36,9 @@ class Media extends PureComponent {
             src={cover}
             width={260} 
             height={160}></img>
-          <h3 className="Media-title">{title}</h3>
-          <p className="Media-author">{author}</p>
         </div>
+        <h3 className="Media-title">{title}</h3>
+        <p className="Media-author">{author}</p>
       </div>
     );
   }

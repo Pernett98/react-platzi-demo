@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import VideoPlayerLayout from '../components/video-player-layout';
 import Video from '../components/video';
 import Title from '../components/title';
@@ -107,7 +109,7 @@ class VideoPlayer extends Component {
   render() {
     return (
       <VideoPlayerLayout setRef={this.setRef}>
-        <Title title={this.props.title}></Title>
+        <Title title={this.props.media.get('title')}></Title>
         <Controls>
           <PlayPause pause={this.state.pause}
             handleClick={this.togglePlay}></PlayPause>
@@ -121,7 +123,7 @@ class VideoPlayer extends Component {
           <FullScreen handleFullScreen={this.handleFullScreen}></FullScreen>
         </Controls>
         <Spinner active={this.state.loading}></Spinner>
-        <Video src={this.props.src}
+        <Video src={this.props.media.get('src')}
           handleLoadedMetadata={this.handleMetadata}
           handleTimeUpdate={this.handleTimeUpdate}
           handleSeeking={this.handleSeeking}
@@ -133,4 +135,11 @@ class VideoPlayer extends Component {
   }
 }
 
-export default VideoPlayer;
+function mapStateToProps(state, props) {
+  const { mediaId } = props;
+  return {
+    media: state.getIn(['data', 'entities', 'media', mediaId])
+  }
+}
+
+export default connect(mapStateToProps)(VideoPlayer);
